@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ATL Filing Registry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      // Catches any error that happens while the app is loading or running —
+      // including ones before React mounts — and displays it directly on the
+      // page, so problems can be diagnosed from a phone alone.
+      function showBootError(title, detail) {
+        var root = document.getElementById("root");
+        if (!root) return;
+        var box = document.createElement("div");
+        box.style.cssText =
+          "font-family: monospace; white-space: pre-wrap; word-break: break-word; " +
+          "padding: 16px; margin: 16px; color: #7f1d1d; background: #fef2f2; " +
+          "border: 1px solid #fca5a5; border-radius: 8px; font-size: 13px; line-height: 1.5;";
+        box.innerHTML =
+          "<strong>" + title + "</strong><br/><br/>" +
+          (detail || "").toString().replace(/</g, "&lt;");
+        root.appendChild(box);
+      }
+      window.addEventListener("error", function (e) {
+        showBootError(
+          "Something broke while loading the app:",
+          (e.message || "Unknown error") +
+            (e.filename ? "\n\nFile: " + e.filename + " (line " + e.lineno + ")" : "")
+        );
+      });
+      window.addEventListener("unhandledrejection", function (e) {
+        var reason = e.reason;
+        var msg = reason && (reason.message || (reason.toString ? reason.toString() : String(reason)));
+        showBootError("Something broke while loading the app (promise error):", msg);
+      });
+      setTimeout(function () {
+        var root = document.getElementById("root");
+        if (root && root.children.length === 0) {
+          showBootError(
+            "The app didn't finish loading.",
+            "No visible error was thrown, but nothing rendered within 6 seconds. Check your internet connection and try refreshing."
+          );
+        }
+      }, 6000);
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
